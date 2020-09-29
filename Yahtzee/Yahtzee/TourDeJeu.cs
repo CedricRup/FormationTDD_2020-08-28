@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Yahtzee
 {
@@ -7,24 +7,24 @@ namespace Yahtzee
     {
         private List<int> tirage;
         private FeuilleDeScore feuilleDeScore;
-        private IGenerateurDeDes _generateurDeDes;
-
-        public TourDeJeu()
-        {
-            feuilleDeScore = new FeuilleDeScore();
-            _generateurDeDes = new GenerateurDeDes();
-        }
+        private IGenerateurDeDes generateurDeDes;
+        private bool tourTermine;
+        private int nombreDeLancers;
 
         public TourDeJeu(FeuilleDeScore feuilleDeScore, IGenerateurDeDes generateurDeDes)
         {
             this.feuilleDeScore = feuilleDeScore;
-            _generateurDeDes = generateurDeDes;
+            this.generateurDeDes = generateurDeDes;
         }
 
         public void LancerDes()
         {
-            var generateur = _generateurDeDes;
-            tirage = generateur.Generer5Des();
+            if (tourTermine|| nombreDeLancers >= 3)
+            {
+                throw new Exception();
+            }
+            tirage = generateurDeDes.Generer5Des();
+            nombreDeLancers++;
         }
 
         public List<int> RecupererDes()
@@ -32,9 +32,10 @@ namespace Yahtzee
             return tirage;
         }
 
-        public void EnregistrerScore(Combinaison @as)
+        public void EnregistrerScore(Combinaison combinaison)
         {
-            throw new System.NotImplementedException();
+            feuilleDeScore.StockerScore(tirage, combinaison);
+            tourTermine = true;
         }
     }
 }

@@ -6,7 +6,8 @@ namespace Yahtzee
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Jeu jeu = new Jeu(new AfficheurConsole(),null);
+            jeu.Commencer();
         }
     }
 }
